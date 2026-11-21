@@ -1,5 +1,5 @@
 import { timingSafeEqual } from 'node:crypto';
-import { runFullSync } from '../server/sync.ts';
+import { runFullSync } from '../server/sync.js';
 
 function isAuthorized(request: Request): boolean {
   const secret = process.env.CRON_SECRET;

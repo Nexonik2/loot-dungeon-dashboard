@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { config } from 'dotenv';
-import { getDb } from '../server/db.ts';
+import { getDb } from '../server/db.js';
 
 config({ path: '.env.local', override: true });
 

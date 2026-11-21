@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { runFullSync } from '../server/sync.ts';
+import { runFullSync } from '../server/sync.js';
 
 config({ path: '.env.local', override: true });
 

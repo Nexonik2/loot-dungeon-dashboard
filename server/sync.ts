@@ -1,5 +1,5 @@
-import { API_ENDPOINTS, CONTRACTS, LOOT_DUNGEON, getActivePools } from './config.ts';
-import { getDb } from './db.ts';
+import { API_ENDPOINTS, CONTRACTS, LOOT_DUNGEON, getActivePools } from './config.js';
+import { getDb } from './db.js';
 
 type BeastStatus =
   | 'staked'
