@@ -44,11 +44,24 @@ CREATE TABLE IF NOT EXISTS beasts (
       'sold_regular',
       'sold_power_form',
       'held_power_form',
-      'held_regular'
+      'held_regular',
+      'superseded'
     )
   ),
   first_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE beasts DROP CONSTRAINT IF EXISTS beasts_status_check;
+ALTER TABLE beasts ADD CONSTRAINT beasts_status_check CHECK (
+  status IN (
+    'staked',
+    'sold_regular',
+    'sold_power_form',
+    'held_power_form',
+    'held_regular',
+    'superseded'
+  )
 );
 
 CREATE INDEX IF NOT EXISTS idx_beasts_status ON beasts (status);

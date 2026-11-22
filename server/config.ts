@@ -33,18 +33,18 @@ export const LOOT_DUNGEON = {
 // - 0x0757dcc3913df8302ea87308f79377f6a3401281047fa7d804d76cb63a5dc6f0
 // - 0x0621bde4b28ed47c402e81f510bff6258438da3931ea714e9191b5fcc11a5baa
 export const BUYBACK_POOLS: PoolConfig[] = [
-  { tier: 1, form: 'regular', address: null },
-  { tier: 1, form: 'power_form', address: null },
-  { tier: 2, form: 'regular', address: null },
-  { tier: 2, form: 'power_form', address: null },
-  { tier: 3, form: 'regular', address: null },
-  { tier: 3, form: 'power_form', address: null },
+  { tier: 1, form: 'regular', address: "0x045b30f28826bb61f85b2d357c0aeacb6543e8f88e797ad1728224e99e87ae7f" },
+  { tier: 1, form: 'power_form', address: "0x0621bde4b28ed47c402e81f510bff6258438da3931ea714e9191b5fcc11a5baa" },
+  { tier: 2, form: 'regular', address: "0x04d1ae4abc19f75aa4d79e0c5a830850f464a40eca1ec18861bc9774d58bb3ef" },
+  { tier: 2, form: 'power_form', address: "0x00194be6400b870901bff7ddc84aa3a83cc50c9d75aa8220658a88a4ed4c4df2" },
+  { tier: 3, form: 'regular', address: "0x06ad78117e48b13b9733da751c12c7dabb936d50dc78f410ee380799c956c1e3" },
+  { tier: 3, form: 'power_form', address: "0x06b449b0bec31bf33615ca2efd0482404726efb068082bbc2d1640907da67030" },
   {
     tier: 4,
     form: 'regular',
     address: '0x0765cb969d1b875df19b8e766442214efe4cef4551988c2b751d75c797f7b5fd',
   },
-  { tier: 4, form: 'power_form', address: null },
+  { tier: 4, form: 'power_form', address: "0x0757dcc3913df8302ea87308f79377f6a3401281047fa7d804d76cb63a5dc6f0" },
   {
     tier: 5,
     form: 'regular',

@@ -6,7 +6,8 @@ type BeastStatus =
   | 'sold_regular'
   | 'sold_power_form'
   | 'held_power_form'
-  | 'held_regular';
+  | 'held_regular'
+  | 'superseded';
 
 interface TransformationResponse {
   dungeon: string;
@@ -134,6 +135,10 @@ async function fetchAllBeastPages(extraParams: Record<string, string> = {}): Pro
   return results;
 }
 
+function isPowerFormVfx(visualEffects: number): boolean {
+  return (visualEffects & LOOT_DUNGEON.powerFormVisualEffects) !== 0;
+}
+
 function classifyBeast(
   tokenId: string,
   visualEffects: number,
@@ -142,7 +147,7 @@ function classifyBeast(
 ): BeastStatus {
   if (stakedIds.has(tokenId)) return 'staked';
 
-  const isPowerForm = visualEffects === LOOT_DUNGEON.powerFormVisualEffects;
+  const isPowerForm = isPowerFormVfx(visualEffects);
   if (vaultIds.has(tokenId)) {
     return isPowerForm ? 'sold_power_form' : 'sold_regular';
   }
@@ -345,6 +350,48 @@ async function syncBeastsAndStatuses() {
       status,
     };
   });
+
+  const regularCandidates = new Map<string, typeof normalized>();
+  for (const b of normalized) {
+    if (b.status !== 'held_regular') continue;
+    const key = `${b.beastId}|${b.prefixName ?? ''}|${b.suffixName ?? ''}|${b.visualEffects}`;
+    const list = regularCandidates.get(key) ?? [];
+    list.push(b);
+    regularCandidates.set(key, list);
+  }
+
+  for (const pf of normalized) {
+    if (!isPowerFormVfx(pf.visualEffects)) continue;
+    const baseVfx = pf.visualEffects & ~LOOT_DUNGEON.powerFormVisualEffects;
+    const key = `${pf.beastId}|${pf.prefixName ?? ''}|${pf.suffixName ?? ''}|${baseVfx}`;
+    const list = regularCandidates.get(key);
+    if (!list || list.length === 0) continue;
+
+    // Prefer exact card_condition fingerprint match, else oldest token minted at/before conversion
+    let matchIdx = list.findIndex(
+      (c) =>
+        c.status === 'held_regular' &&
+        c.cardConditionText !== null &&
+        c.cardConditionText === pf.cardConditionText,
+    );
+    if (matchIdx === -1) {
+      let bestBlock = Number.POSITIVE_INFINITY;
+      for (let i = 0; i < list.length; i++) {
+        const c = list[i];
+        if (
+          c.status === 'held_regular' &&
+          c.mintedAtBlock <= pf.mintedAtBlock &&
+          c.mintedAtBlock < bestBlock
+        ) {
+          bestBlock = c.mintedAtBlock;
+          matchIdx = i;
+        }
+      }
+    }
+    if (matchIdx !== -1) {
+      list[matchIdx].status = 'superseded';
+    }
+  }
 
   const statusChanges: Array<{ tokenId: string; oldStatus: string; newStatus: string }> = [];
   for (const b of normalized) {
