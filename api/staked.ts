@@ -1,4 +1,4 @@
-import { getDb } from '../server/db.ts';
+import { getDb } from '../server/db.js';
 
 interface ApiRequest {
   method?: string;
