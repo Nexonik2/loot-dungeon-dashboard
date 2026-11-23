@@ -1,4 +1,4 @@
-export type TabId = 'overview' | 'quality' | 'wanted' | 'pools' | 'player';
+export type TabId = 'overview' | 'staked' | 'beasts' | 'pools' | 'player';
 
 export type ActiveBeastStatus =
   | 'staked'
@@ -181,7 +181,26 @@ export interface PlayerHeldBeast {
   power: number;
   projectedRank: number | null;
   isPowerForm: boolean;
+  visualEffects: number;
   cardGrade: number | null;
+  mintedAtMinute: number | null;
+}
+
+export interface PlayerStakedBeast {
+  tokenId: string;
+  beastId: number;
+  name: string;
+  type: string;
+  tier: number;
+  prefixName: string | null;
+  suffixName: string | null;
+  level: number;
+  health: number;
+  power: number | null;
+  cardGrade: number | null;
+  visualEffects: number;
+  stakedAt: number | null;
+  transformsAt: number | null;
   mintedAtMinute: number | null;
 }
 
@@ -189,9 +208,13 @@ export interface PlayerResponse {
   address: string;
   fetchedAt: string;
   summary: {
+    totalOwned: number;
     heldTotal: number;
     heldPowerForms: number;
     heldRegular: number;
+    stakedCount: number;
+    readyToEvolveCount: number;
+    avgGrade: number | null;
     avgHeldGrade: number | null;
     dungeonBeastsCount: number;
     takenCount: number;
@@ -203,8 +226,58 @@ export interface PlayerResponse {
   };
   gradeCounts: Record<string, number>;
   tierCounts: Record<string, number>;
+  stakedBeasts: PlayerStakedBeast[];
   heldBeasts: PlayerHeldBeast[];
   dungeonBeasts: Array<Record<string, unknown>>;
   takenBeasts: Array<Record<string, unknown>>;
   recentKills: Array<Record<string, unknown>>;
+}
+
+export type MegaStatusFilter = 'all' | 'held' | 'sold';
+
+export interface MegaSpeciesRow {
+  beastId: number;
+  name: string;
+  type: string;
+  tier: number;
+  totalCount: number;
+  heldCount: number;
+  soldCount: number;
+  specialVfxCount: number;
+  avgGrade: number | null;
+}
+
+export interface MegasSummaryResponse {
+  mode: 'summary';
+  totalMegas: number;
+  heldTotal: number;
+  soldTotal: number;
+  species: MegaSpeciesRow[];
+}
+
+export interface MegaBeastItem {
+  tokenId: string;
+  beastId: number;
+  name: string;
+  type: string;
+  tier: number;
+  prefixName: string | null;
+  suffixName: string | null;
+  level: number;
+  health: number;
+  power: number;
+  projectedRank: number | null;
+  cardGrade: number | null;
+  visualEffects: number;
+  mintedAtMinute: number;
+  status: 'held_power_form' | 'sold_power_form';
+  soldToBuyback: boolean;
+}
+
+export interface MegasDetailResponse {
+  mode: 'detail';
+  total: number;
+  page: number;
+  limit: number;
+  items: MegaBeastItem[];
 }

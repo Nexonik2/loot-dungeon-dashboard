@@ -1,4 +1,4 @@
-import { getDb } from '../server/db.js';
+import { getDb } from '../server/db.ts';
 
 interface ApiRequest {
   method?: string;
@@ -74,10 +74,18 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
             AND (${typeFilter}::text IS NULL OR type = ${typeFilter})
             AND (${minGrade}::smallint IS NULL OR card_grade >= ${minGrade})
           ORDER BY
+            CASE WHEN ${sort} = 'beast_asc' THEN LOWER(COALESCE(prefix_name, '') || ' ' || COALESCE(suffix_name, '') || ' ' || name) END ASC,
+            CASE WHEN ${sort} = 'beast_desc' THEN LOWER(COALESCE(prefix_name, '') || ' ' || COALESCE(suffix_name, '') || ' ' || name) END DESC,
             CASE WHEN ${sort} = 'level_asc' THEN level END ASC,
+            CASE WHEN ${sort} = 'level_desc' THEN level END DESC,
             CASE WHEN ${sort} = 'health_asc' THEN health END ASC,
+            CASE WHEN ${sort} = 'health_desc' THEN health END DESC,
             CASE WHEN ${sort} = 'power_asc' THEN power END ASC,
+            CASE WHEN ${sort} = 'power_desc' THEN power END DESC,
+            CASE WHEN ${sort} = 'grade_asc' THEN COALESCE(card_grade, 99) END ASC,
             CASE WHEN ${sort} = 'grade_desc' THEN COALESCE(card_grade, 0) END DESC,
+            CASE WHEN ${sort} = 'caught_asc' THEN minted_at_minute END ASC,
+            CASE WHEN ${sort} = 'caught_desc' THEN minted_at_minute END DESC,
             level ASC,
             token_id ASC
           LIMIT ${limit}

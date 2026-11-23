@@ -4,17 +4,17 @@ import { useApi } from './lib/useApi';
 import { OverviewTab } from './tabs/OverviewTab';
 import type { OverviewResponse, TabId } from './types/dashboard';
 
-const QualityTab = lazy(() => import('./tabs/QualityTab'));
-const WantedTab = lazy(() => import('./tabs/WantedTab'));
+const StakedTab = lazy(() => import('./tabs/StakedTab'));
+const BeastsTab = lazy(() => import('./tabs/BeastsTab'));
 const PoolsTab = lazy(() => import('./tabs/PoolsTab'));
 const PlayerTab = lazy(() => import('./tabs/PlayerTab'));
 
-const TABS: Array<{ id: TabId; label: string; shortLabel: string }> = [
-  { id: 'overview', label: 'Overview', shortLabel: 'Overview' },
-  { id: 'wanted', label: 'Wanted List', shortLabel: 'Wanted' },
-  { id: 'pools', label: 'Buyback Pools', shortLabel: 'Pools' },
-  { id: 'quality', label: 'Beast Quality', shortLabel: 'Quality' },
-  { id: 'player', label: 'My Account', shortLabel: 'Account' },
+const TABS: Array<{ id: TabId; label: string }> = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'staked', label: 'Staked' },
+  { id: 'beasts', label: 'Beasts' },
+  { id: 'pools', label: 'Pools' },
+  { id: 'player', label: 'Account' },
 ];
 
 function TabFallback() {
@@ -60,7 +60,7 @@ export default function App() {
                   onClick={() => handleNavigate(t.id)}
                   className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                     activeTab === t.id
-                      ? 'bg-surface-elevated text-ink'
+                      ? 'bg-surface-elevated text-accent'
                       : 'text-ink-muted hover:text-ink'
                   }`}
                 >
@@ -100,21 +100,21 @@ export default function App() {
           </>
         )}
 
-        {activeTab === 'wanted' && (
+        {activeTab === 'staked' && (
           <Suspense fallback={<TabFallback />}>
-            <WantedTab />
+            <StakedTab />
+          </Suspense>
+        )}
+
+        {activeTab === 'beasts' && (
+          <Suspense fallback={<TabFallback />}>
+            <BeastsTab />
           </Suspense>
         )}
 
         {activeTab === 'pools' && (
           <Suspense fallback={<TabFallback />}>
             <PoolsTab />
-          </Suspense>
-        )}
-
-        {activeTab === 'quality' && (
-          <Suspense fallback={<TabFallback />}>
-            <QualityTab />
           </Suspense>
         )}
 
@@ -139,11 +139,11 @@ export default function App() {
                 onClick={() => handleNavigate(t.id)}
                 className={`flex min-h-13 flex-col items-center justify-center px-1 py-2 text-[11px] font-medium transition-colors ${
                   isActive
-                    ? 'border-t-2 border-accent text-ink'
+                    ? 'border-t-2 border-accent text-accent'
                     : 'border-t-2 border-transparent text-ink-muted'
                 }`}
               >
-                {t.shortLabel}
+                {t.label}
               </button>
             );
           })}

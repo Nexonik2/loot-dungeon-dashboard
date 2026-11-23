@@ -1,5 +1,5 @@
 import { scaleLinear } from 'd3-scale';
-import type { CurvePoint } from '../lib/auctionCurve';
+import type { CurvePoint } from '../../lib/auctionCurve';
 
 interface PoolSparklineProps {
   points: CurvePoint[];

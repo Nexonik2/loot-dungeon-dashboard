@@ -1,6 +1,7 @@
 interface KpiCardProps {
   label: string;
   value: string;
+  denominator?: string;
   sublabel?: string;
   accentClass?: string;
   onDrillDown?: () => void;
@@ -10,6 +11,7 @@ interface KpiCardProps {
 export function KpiCard({
   label,
   value,
+  denominator,
   sublabel,
   accentClass = 'text-ink',
   onDrillDown,
@@ -21,8 +23,15 @@ export function KpiCard({
         <div className="text-xs font-medium uppercase tracking-wide text-ink-muted">
           {label}
         </div>
-        <div className={`num mt-1.5 text-2xl font-semibold tracking-tight ${accentClass}`}>
-          {value}
+        <div className="num mt-1.5 flex flex-wrap items-baseline gap-x-1.5">
+          <span className={`text-2xl font-semibold tracking-tight ${accentClass}`}>
+            {value}
+          </span>
+          {denominator && (
+            <span className="text-sm font-normal text-ink-faint">
+              / {denominator}
+            </span>
+          )}
         </div>
         {sublabel && (
           <div className="num mt-1 text-xs text-ink-faint">{sublabel}</div>

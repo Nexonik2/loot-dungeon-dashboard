@@ -2,27 +2,44 @@
 @import "uplot/dist/uPlot.min.css";
 
 @theme {
-  /* Core dark dungeon surface palette */
-  --color-bg: #0b0d11;
-  --color-surface: #131720;
-  --color-surface-elevated: #1a202c;
-  --color-border: #262f40;
+  /* Loot Survivor dark obsidian / charcoal + green palette */
+  --color-bg: #070907;
+  --color-surface: #0f130f;
+  --color-surface-elevated: #171d17;
+  --color-border: #232d23;
 
   /* Typography */
-  --color-ink: #edf2f7;
-  --color-ink-muted: #94a3b8;
-  --color-ink-faint: #64748b;
+  --color-ink: #eef2ec;
+  --color-ink-muted: #98a698;
+  --color-ink-faint: #627062;
 
-  /* 5 Active Beast State Tokens */
-  --color-state-staked: #f59e0b;
-  --color-state-held-reg: #64748b;
-  --color-state-held-pf: #8b5cf6;
-  --color-state-sold-reg: #ef4444;
-  --color-state-sold-pf: #10b981;
+  /* 5 Active Beast State Tokens (multi-series charts) */
+  --color-state-staked: #d99b26;
+  --color-state-held-reg: #71717a;
+  --color-state-held-pf: #9b6adf;
+  --color-state-sold-reg: #d45b5b;
+  --color-state-sold-pf: #3ea368;
 
-  /* Accent & Alert */
-  --color-accent: #38bdf8;
-  --color-warn: #fb923c;
+  /* Binary Ownership (softer green vs. softer red to reduce eye strain) */
+  --color-owner-player: #3ea368;
+  --color-owner-buyback: #d45b5b;
+
+  /* Beast Combat Types */
+  --color-type-hunter: #48b878;
+  --color-type-brute: #e06c6c;
+  --color-type-magic: #5b9cf6;
+
+  /* Metallic Card Grade Tiers */
+  --color-grade-10: #eab338;
+  --color-grade-9: #d4d8d4;
+  --color-grade-8: #d98245;
+
+  /* Special Trait */
+  --color-midi: #38bdf8;
+
+  /* Primary Loot Survivor Green Accent & Overflow Warning */
+  --color-accent: #4ade80;
+  --color-warn: #e08244;
 }
 
 @layer base {

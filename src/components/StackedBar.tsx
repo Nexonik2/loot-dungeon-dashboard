@@ -69,7 +69,7 @@ export function StackedBarRow({
         })}
       </div>
 
-      <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-ink-faint num">
+      <div className="flex flex-wrap gap-x-3.5 gap-y-1 text-[11px] text-ink-faint num">
         {STATUS_ORDER.map((status) => {
           const val = counts[status] ?? 0;
           if (val <= 0) return null;
@@ -80,7 +80,7 @@ export function StackedBarRow({
               />
               <span>{STATUS_META[status].shortLabel}:</span>
               <span className="text-ink-muted">
-                {mode === 'percent' ? formatPct(val, rowTotal, 0) : formatInt(val)}
+                {formatInt(val)} ({formatPct(val, rowTotal, 0)})
               </span>
             </span>
           );
