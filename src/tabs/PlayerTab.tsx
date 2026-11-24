@@ -12,10 +12,12 @@ import { KpiCard } from '../components/KpiCard';
 import {
   formatCountdown,
   formatInt,
+  formatPct,
   formatRelativeTime,
   shortAddr,
 } from '../lib/format';
 import type { PlayerResponse } from '../types/dashboard';
+import { PlayerDistributionCharts } from '../components/player/PlayerDistributionCharts';
 
 const STORAGE_KEY = 'loot_dungeon_last_wallet';
 
@@ -198,6 +200,16 @@ export default function PlayerTab() {
     return list;
   }, [data?.heldBeasts, heldSort]);
 
+  const midiStats = useMemo(() => {
+    const staked = (data?.stakedBeasts ?? []).filter(
+      (b) => (b.visualEffects & 1) !== 0,
+    ).length;
+    const held = (data?.heldBeasts ?? []).filter(
+      (b) => (b.visualEffects & 1) !== 0,
+    ).length;
+    return { staked, held, total: staked + held };
+  }, [data?.stakedBeasts, data?.heldBeasts]);
+
   const renderSortBtn = <T extends string>(
     col: T,
     label: string,
@@ -224,7 +236,6 @@ export default function PlayerTab() {
     );
   };
 
-  const grades = [10, 9, 8, 7, 6, 5];
   const evmWarning = isEvmLengthAddress(inputAddr || activeAddr);
 
   return (
@@ -327,65 +338,34 @@ export default function PlayerTab() {
               accentClass="text-state-staked"
             />
             <KpiCard
-              label="Runs Played"
-              value={formatInt(data.summary.runsStarted)}
-              sublabel={`${formatInt(data.summary.runsMinted)} minted · ${formatInt(data.summary.runsCompleted)} finished`}
-              accentClass="text-accent"
+              label="MIDI Beasts"
+              value={formatInt(midiStats.total)}
+              sublabel={
+                midiStats.total > 0
+                  ? `${formatInt(midiStats.staked)} staked · ${formatInt(midiStats.held)} held (${formatPct(midiStats.total, Math.max(data.summary.totalOwned, 1))})`
+                  : 'None in current collection'
+              }
+              accentClass="text-midi"
             />
             <KpiCard
-              label="Kills & Bags"
-              value={formatInt(data.summary.killsCount)}
-              sublabel={`${formatInt(data.summary.uniqueBagsUsed)} Loot Bags · ${formatInt(data.summary.takenCount)} captured`}
-              accentClass="text-owner-player"
+              label="Runs Played"
+              value={formatInt(data.summary.runsStarted)}
+              sublabel={
+                data.summary.takenCount > 0
+                  ? `of ${formatInt(data.summary.runsMinted)} minted, ${formatInt(data.summary.takenCount)} ${
+                      data.summary.takenCount === 1 ? 'beast' : 'beasts'
+                    } captured`
+                  : `of ${formatInt(data.summary.runsMinted)} minted`
+              }
+              accentClass="text-accent"
             />
           </section>
 
-          {/* Combined Held + Staked Tier & Grade Breakdown */}
-          <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="rounded-xl border border-border bg-surface p-4 space-y-2.5">
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  Beasts by Tier
-                </h3>
-                <span className="text-[11px] text-ink-faint">Held + Staked</span>
-              </div>
-              <div className="grid grid-cols-5 gap-2 num">
-                {[1, 2, 3, 4, 5].map((tier) => (
-                  <div
-                    key={tier}
-                    className="rounded-lg border border-border/70 bg-bg p-2.5 text-center"
-                  >
-                    <div className="text-[11px] text-ink-faint">T{tier}</div>
-                    <div className="mt-1 text-base font-semibold text-ink">
-                      {formatInt(data.tierCounts[String(tier)] ?? 0)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-border bg-surface p-4 space-y-2.5">
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-                  Beasts by Card Grade
-                </h3>
-                <span className="text-[11px] text-ink-faint">Held + Staked</span>
-              </div>
-              <div className="grid grid-cols-6 gap-2 num">
-                {grades.map((g) => (
-                  <div
-                    key={g}
-                    className="rounded-lg border border-border/70 bg-bg p-2.5 text-center"
-                  >
-                    <div className="text-[11px] text-ink-faint">G{g}</div>
-                    <div className="mt-1 text-base font-semibold text-ink">
-                      {formatInt(data.gradeCounts[String(g)] ?? 0)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+          <PlayerDistributionCharts
+            tierCounts={data.tierCounts}
+            gradeCounts={data.gradeCounts}
+            totalBeasts={data.summary.totalOwned}
+          />
 
           {/* Currently Staked Beasts (with Staked & Until Evolved countdowns) */}
           <section className="rounded-xl border border-border bg-surface p-4 sm:p-5">

@@ -131,25 +131,33 @@ export function OverviewTab({ data, onNavigate }: OverviewTabProps) {
         className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4"
       >
         {navCards.map((card) => (
-          <div
+          <button
             key={card.tab}
-            className="flex flex-col justify-between gap-3 rounded-xl border border-border bg-surface p-4"
+            type="button"
+            onClick={() => onNavigate(card.tab)}
+            className="group flex flex-col items-center justify-between gap-4 rounded-xl border border-border bg-surface p-5 text-center transition-colors hover:border-owner-player/45 hover:bg-surface-elevated/50"
           >
-            <div>
+            <div className="space-y-1.5">
               <h2 className="text-sm font-semibold text-ink">{card.title}</h2>
-              <p className="mt-1 text-xs leading-relaxed text-ink-muted">{card.desc}</p>
+              <p className="text-xs leading-relaxed text-ink-muted">{card.desc}</p>
             </div>
-            <div>
-              <button
-                type="button"
-                onClick={() => onNavigate(card.tab)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent transition-colors hover:border-accent/70 hover:bg-accent/20"
+
+            <span className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-owner-player/40 bg-owner-player/10 px-3 py-2 text-xs font-medium text-accent transition-colors group-hover:border-accent/70 group-hover:bg-owner-player/20">
+              <span>{card.buttonLabel}</span>
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
               >
-                <span>{card.buttonLabel}</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
+                <path d="M6 3.5L10.5 8L6 12.5" />
+              </svg>
+            </span>
+          </button>
         ))}
       </section>
 

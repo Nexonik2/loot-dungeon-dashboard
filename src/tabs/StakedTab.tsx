@@ -174,7 +174,7 @@ export default function StakedTab() {
                 className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-elevated"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="num shrink-0 rounded-md bg-bg px-2.5 py-1 text-xs font-semibold text-state-staked ring-1 ring-border">
+                  <span className="num flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-owner-player/40 bg-owner-player/12 text-base font-bold tracking-tight text-accent">
                     T{tierRow.tier}
                   </span>
                   <div className="min-w-0 space-y-1">

@@ -97,9 +97,6 @@ export function SupplyProgressSection({
             1,242 max per species (1,035 final Normal + 207 Mega) · 7,452 per tier
           </p>
         </div>
-        <span className="num text-xs text-ink-faint">
-          {formatInt(claimed)} / {formatInt(totalCap)} caught
-        </span>
       </div>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
